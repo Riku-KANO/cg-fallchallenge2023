@@ -3,7 +3,6 @@
 #include <random>
 #include <chrono>
 
-using std::cin, std::cout;
 using ll = long long;
 
 using i8 = char;
@@ -19,11 +18,10 @@ using byte = unsigned int;
 #define ID int
 #define FOR(i, n) for (int i = 0; i < (int)(n); i++)
 #define DEBUG 1
-#define LOG_INFO(message, ...)                                                 \
-  fprintf(stderr, "[INFO] " message "\n", ##__VA_ARGS__)
-#define LOG_ERROR(message, ...)                                                \
-  fprintf(stderr, "[ERROR] " message "\n", ##__VA_ARGS__)
-
+#define LOG_INFO(message, ...) \
+    fprintf(stderr, "[INFO] " message "\n", ##__VA_ARGS__)
+#define LOG_ERROR(message, ...) \
+    fprintf(stderr, "[ERROR] " message "\n", ##__VA_ARGS__)
 
 constexpr double TL_FIRST = 1.0;
 constexpr double TL_TURN = 0.050;
@@ -56,6 +54,22 @@ constexpr int POINT_ALL_TYPE = 4;
 std::random_device seed_gen;
 std::mt19937 mt(seed_gen());
 
-double get_time(clock_t start_time) {
-  return (double)(clock() - start_time) / CLOCKS_PER_SEC;
+double get_time(clock_t start_time)
+{
+    return (double)(clock() - start_time) / CLOCKS_PER_SEC;
+}
+
+int get_time_ms(clock_t start_time)
+{
+    return clock() - start_time;
+}
+
+// for clang compiler
+bool contain_value(const std::vector<int>* vec, int value) {
+    for(int element: *vec) {
+        if(element == value) {
+            return true;
+        }
+    }
+    return false;
 }

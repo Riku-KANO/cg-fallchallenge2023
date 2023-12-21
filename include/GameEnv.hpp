@@ -2,19 +2,16 @@
 
 #include <set>
 #include <cstring>
-#include "global.h"
-#include "Drone.h"
-#include "Creature.h"
-#include "GameLoopInput.h"
+#include "global.hpp"
+#include "Drone.hpp"
+#include "Creature.hpp"
+#include "GameLoopInput.hpp"
 
 class GameEnv
 {
 public:
   CreatureGroup cg;
-  std::set<ID> my_drone_ids;
-  std::set<ID> foe_drone_ids;
-  DroneGroup my_dg;
-  DroneGroup foe_dg;
+  DroneGroup dg;
 
   int my_score;
   int foe_score;
@@ -50,7 +47,7 @@ public:
 
   inline void init();
   inline void update(const GameLoopInput &input);
-  inline int calc_scanned_fish_estimated_point();
+  inline bool is_specie_found_first(int color, int type) const ;
 
 private:
   inline void update_score(const GameLoopInput &input);

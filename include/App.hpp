@@ -1,8 +1,8 @@
 #pragma once
 #include <chrono>
-#include "global.h"
-#include "Property.h"
-#include "Game.h"
+#include "global.hpp"
+#include "Property.hpp"
+#include "Game.hpp"
 
 class App {
 public:

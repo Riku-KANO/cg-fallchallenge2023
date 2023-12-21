@@ -1,6 +1,4 @@
-#include "Player.h"
-#include "Property.h"
-#include "geometry.h"
+#include "Player.hpp"
 
 void Player::init(const Property &props)
 {
@@ -19,7 +17,7 @@ void Player::init(const Property &props)
 void Player::update(GameEnv &ge, const GameLoopInput &input)
 {
     // drone scan update
-    for (ID drone_id : ge.my_dg.ids)
+    for (ID drone_id : ge.dg.my_ids)
     {
         drone_scanned[drone_id].clear();
     }
@@ -37,7 +35,7 @@ void Player::update(GameEnv &ge, const GameLoopInput &input)
     }
 
     // drone target update
-    for (ID drone_id : ge.my_dg.ids)
+    for (ID drone_id : ge.dg.my_ids)
     {
         int target = drone_current_target[drone_id];
         if (ge.my_scanned[target] || !ge.observable[target] ||
@@ -51,7 +49,7 @@ void Player::update(GameEnv &ge, const GameLoopInput &input)
                 LOG_INFO("Drone %2d lost its target %2d...", drone_id, target);
             }
         }
-        if (ge.my_dg.drones[drone_id].emergency == 1)
+        if (ge.dg.drones[drone_id].emergency == 1)
         {
             drone_current_target[drone_id] = -1;
             drone_scanned[drone_id].clear();
@@ -71,28 +69,28 @@ void Player::update(GameEnv &ge, const GameLoopInput &input)
             continue;
         }
         Rectangle rect;
-        for (ID did : ge.my_dg.ids)
+        for (ID did : ge.dg.my_ids)
         {
             std::string radar = drone_radar[did][cid];
             if (radar == "TL")
             {
-                rect.max_y = std::min(rect.max_y, ge.my_dg.drones[did].pos.y);
-                rect.max_x = std::min(rect.max_x, ge.my_dg.drones[did].pos.x);
+                rect.max_y = std::min(rect.max_y, ge.dg.drones[did].pos.y);
+                rect.max_x = std::min(rect.max_x, ge.dg.drones[did].pos.x);
             }
             else if (radar == "TR")
             {
-                rect.max_y = std::min(rect.max_y, ge.my_dg.drones[did].pos.y);
-                rect.min_x = std::max(rect.min_x, ge.my_dg.drones[did].pos.x);
+                rect.max_y = std::min(rect.max_y, ge.dg.drones[did].pos.y);
+                rect.min_x = std::max(rect.min_x, ge.dg.drones[did].pos.x);
             }
             else if (radar == "BL")
             {
-                rect.min_y = std::max(rect.min_y, ge.my_dg.drones[did].pos.y);
-                rect.max_x = std::min(rect.max_x, ge.my_dg.drones[did].pos.x);
+                rect.min_y = std::max(rect.min_y, ge.dg.drones[did].pos.y);
+                rect.max_x = std::min(rect.max_x, ge.dg.drones[did].pos.x);
             }
             else if (radar == "BR")
             {
-                rect.min_y = std::max(rect.min_y, ge.my_dg.drones[did].pos.y);
-                rect.min_x = std::max(rect.min_x, ge.my_dg.drones[did].pos.x);
+                rect.min_y = std::max(rect.min_y, ge.dg.drones[did].pos.y);
+                rect.min_x = std::max(rect.min_x, ge.dg.drones[did].pos.x);
             }
             else
             {
@@ -128,7 +126,7 @@ inline Point Player::define_move_by_target_rectangle(ID drone_id)
 inline Vec<std::string> Player::suggest_actions(int turn, GameEnv &env)
 {
     CreatureGroup &cg = env.cg;
-    DroneGroup &my_dg = env.my_dg;
+    DroneGroup &dg = env.dg;
     Vec<std::string> commands;
     Vec<std::pair<Point, Vector2d<int>>> monsters_physics;
     bool lightOn;
@@ -147,9 +145,9 @@ inline Vec<std::string> Player::suggest_actions(int turn, GameEnv &env)
         monsters_physics.push_back({Point{x, y}, Vector2d<int>{vx, vy}});
     }
 
-    for (const ID drone_id : my_dg.ids)
+    for (const ID drone_id : dg.my_ids)
     {
-        Drone &drone = my_dg.drones[drone_id];
+        Drone &drone = dg.drones[drone_id];
         if (drone_current_target[drone_id] == -1)
         {
             LOG_INFO("find nearest by drone %d", drone_id);

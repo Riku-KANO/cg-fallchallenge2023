@@ -1,8 +1,8 @@
-#include "App.h"
+#include "App.hpp"
 
 /**
  * @brief main function 
- * fawefawfawef
+ * 
  * @param argc 
  * @param argv 
  * @return int 
